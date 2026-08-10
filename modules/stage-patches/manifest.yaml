@@ -1,0 +1,16 @@
+id: stage-patches
+name: Stage Windows Update patches
+version: 1.0.0
+risk_level: low
+environments: [windows-server-2019, windows-server-2022]
+validation_status: lab-validated
+inputs:
+  patch_ids: { type: array<string>, required: false }
+outputs:
+  staged: { type: array<string> }
+  failed: { type: array<string> }
+rollback:
+  procedure: rollback-stage-patches.ps1
+  tested: true
+tests:
+  lab_suite: stage-patches.tests.ps1
