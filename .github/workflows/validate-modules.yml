@@ -1,0 +1,43 @@
+name: Validate Modules
+
+# See sab-engine/docs/pre-development-checklist.md, PD-13, for the full
+# reasoning behind this design. Short version: the actual validation
+# logic (SabEngine.Modules, matching the manifest schema from
+# SAB_Design_Document_v0.1.2.md, Section 4.2) lives in the sab-engine
+# repo, not here. Rather than duplicate that logic in sab-modules (which
+# would let the two drift apart from each other over time) or publish it
+# as a NuGet tool (real setup cost, premature while the schema is still
+# actively changing), this workflow checks out sab-engine alongside
+# itself and runs its validator CLI directly from source. Revisit as a
+# published tool once the OSML has real external contributors.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout sab-modules
+        uses: actions/checkout@v4
+        with:
+          path: sab-modules
+
+      - name: Checkout sab-engine (validator source)
+        uses: actions/checkout@v4
+        with:
+          repository: sab-hq/sab-engine
+          path: sab-engine
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Validate every module manifest
+        run: dotnet run --project sab-engine/src/SabEngine.Modules.Cli -- sab-modules/modules

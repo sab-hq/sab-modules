@@ -1,0 +1,16 @@
+id: pre-flight-check
+name: Pre-flight health check
+version: 1.0.0
+risk_level: low
+environments: [windows-server-2019, windows-server-2022]
+validation_status: lab-validated
+inputs:
+  min_free_disk_percent: { type: number, required: false }
+outputs:
+  healthy: { type: boolean }
+  reasons: { type: array<string> }
+rollback:
+  procedure: rollback-pre-flight-check.ps1
+  tested: true
+tests:
+  lab_suite: pre-flight-check.tests.ps1
