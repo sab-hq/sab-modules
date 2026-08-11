@@ -1,0 +1,19 @@
+id: validate
+name: Validate patches applied and server healthy
+version: 1.0.0
+risk_level: low
+environments: [windows-server-2019, windows-server-2022]
+validation_status: lab-validated
+inputs:
+  patch_ids: { type: array<string>, required: false }
+  min_free_disk_percent: { type: number, required: false }
+outputs:
+  confirmed: { type: array<string> }
+  missing: { type: array<string> }
+  healthy: { type: boolean }
+  reasons: { type: array<string> }
+rollback:
+  procedure: rollback-validate.ps1
+  tested: true
+tests:
+  lab_suite: validate.tests.ps1
