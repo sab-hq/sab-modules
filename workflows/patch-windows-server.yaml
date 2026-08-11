@@ -1,0 +1,35 @@
+# patch-windows-server — SAB's first real workflow definition.
+#
+# NOTE ON SCHEMA: unlike modules (docs/design/SAB_Design_Document_v0.1.2.md,
+# Section 4.2, parsed by SabEngine.Modules — PD-12), there is no formal
+# workflow YAML schema defined anywhere in the design doc, and no parser
+# or validator exists for this file yet (PD-13's SabEngine.Modules.Cli
+# only validates module manifests). This schema is a reasonable,
+# consistent design — matching the module contract's snake_case
+# conventions and the same ModuleId/ModuleVersion shape SabEngine.Core's
+# ProposedModuleStep already uses (PD-6) — but it is genuinely
+# unvalidated by any automated tool. See pre-development-checklist.md,
+# PD-21, for the honest accounting of this gap.
+#
+# Section 4.2's own principle still applies: a workflow references
+# modules by their contract (id + version), not their implementation —
+# the actual module content can change without this file needing to.
+
+id: patch-windows-server
+name: Patch Windows Server
+version: 1.0.0
+description: >
+  Standard Windows Server patching workflow — confirms the server is
+  healthy enough to patch, stages available updates, installs them, and
+  confirms both the server and the specific patches came through
+  correctly afterward.
+environments: [windows-server-2019, windows-server-2022]
+steps:
+  - module_id: pre-flight-check
+    module_version: 1.0.0
+  - module_id: stage-patches
+    module_version: 1.0.0
+  - module_id: apply-patches
+    module_version: 1.0.0
+  - module_id: validate
+    module_version: 1.0.0
