@@ -1,0 +1,17 @@
+id: apply-patches
+name: Apply staged Windows Update patches
+version: 1.0.0
+risk_level: high
+environments: [windows-server-2019, windows-server-2022]
+validation_status: lab-validated
+inputs:
+  patch_ids: { type: array<string>, required: false }
+outputs:
+  applied: { type: array<string> }
+  failed: { type: array<string> }
+  reboot_required: { type: boolean }
+rollback:
+  procedure: rollback-apply-patches.ps1
+  tested: true
+tests:
+  lab_suite: apply-patches.tests.ps1
